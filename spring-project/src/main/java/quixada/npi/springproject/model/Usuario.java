@@ -1,15 +1,15 @@
 package quixada.npi.springproject.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 public class Usuario implements UserDetails {
@@ -28,10 +28,13 @@ public class Usuario implements UserDetails {
 	private String email;
 	
 	@NotEmpty
-	@JsonIgnore
 	private String password;
 
 	private boolean habilitado;
+
+	@ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.REFRESH})
+	@JoinColumn(name="curso_id")
+	private Curso curso;
 
 	public Usuario() {}
 
@@ -48,6 +51,14 @@ public class Usuario implements UserDetails {
 		this.habilitado = habilitado;
 	}
 
+	public Usuario (Integer id, String nome, String email, boolean habilitado, Curso curso) {
+		this.id = id;
+		this.nome = nome;
+		this.email = email;
+		this.habilitado = habilitado;
+		this.curso = curso;
+	}
+
 	public Integer getId() {
 		return id;
 	}
@@ -56,9 +67,7 @@ public class Usuario implements UserDetails {
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
-	}
+	public String getNome() { return nome; }
 
 	public void setNome(String nome) {
 		this.nome = nome;
@@ -76,13 +85,15 @@ public class Usuario implements UserDetails {
 		this.password = password;
 	}
 
-	public boolean isHabilitado() {
-		return habilitado;
-	}
+	public boolean isHabilitado() {	return habilitado; }
 
 	public void setHabilitado(boolean habilitado) {
 		this.habilitado = habilitado;
 	}
+
+	public Curso getCurso() { return curso; }
+
+	public void setCurso(Curso curso) { this.curso = curso; }
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -140,5 +151,4 @@ public class Usuario implements UserDetails {
 			return false;
 		return true;
 	}
-	
 }

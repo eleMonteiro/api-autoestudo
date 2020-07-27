@@ -1,5 +1,13 @@
 package quixada.npi.springproject.controller;
 
+import static org.springframework.http.ResponseEntity.ok;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -9,15 +17,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
 import quixada.npi.springproject.config.JwtTokenProvider;
 import quixada.npi.springproject.model.Usuario;
 import quixada.npi.springproject.repository.UsuarioRepository;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 public class AuthenticationController {
@@ -49,5 +52,9 @@ public class AuthenticationController {
         }
     }
 
-
+    @PostMapping("/logout")
+    public void logout(HttpSession session) {
+        session.invalidate();
+    }
+    
 }
